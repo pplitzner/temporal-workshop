@@ -1,4 +1,4 @@
-package digital.ald.temporalworkshop.c01_3_signal
+package digital.ald.temporalworkshop.c01_1_returnvalues
 
 import io.temporal.client.WorkflowClient
 import io.temporal.serviceclient.WorkflowServiceStubs
@@ -11,9 +11,9 @@ fun main() {
     val workflowClient = WorkflowClient.newInstance(service)
 
     val workerFactory = WorkerFactory.newInstance(workflowClient)
-    val worker = workerFactory.newWorker("c01_3")
-    worker.registerWorkflowImplementationTypes(MyWorkflowImpl_c01_3::class.java)
-    worker.registerActivitiesImplementations(MyActivityImpl_c01_3())
+    val worker = workerFactory.newWorker("c01_1")
+    worker.registerWorkflowImplementationTypes(MyWorkflowImpl_c01_1::class.java)
+    worker.registerActivitiesImplementations(MyActivityImpl_c01_1())
 
     workerFactory.start()
 }
