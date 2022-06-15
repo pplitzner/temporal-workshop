@@ -1,4 +1,4 @@
-package digital.ald.temporalworkshop.c01_1_basic
+package digital.ald.temporalworkshop.c01_0_basic
 
 import io.temporal.activity.ActivityOptions
 import io.temporal.workflow.Workflow
