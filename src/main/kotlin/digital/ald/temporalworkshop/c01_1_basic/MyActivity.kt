@@ -1,4 +1,4 @@
-package digital.ald.temporalworkshop.basic
+package digital.ald.temporalworkshop.c01_1_basic
 
 import io.temporal.activity.ActivityInterface
 import io.temporal.activity.ActivityMethod

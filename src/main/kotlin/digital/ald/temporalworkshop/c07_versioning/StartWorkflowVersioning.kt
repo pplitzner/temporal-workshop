@@ -1,9 +1,10 @@
-package digital.ald.temporalworkshop.basic
+package digital.ald.temporalworkshop.c07_versioning
 
 import io.temporal.client.WorkflowClient
 import io.temporal.client.WorkflowOptions
 import io.temporal.serviceclient.WorkflowServiceStubs
 import io.temporal.serviceclient.WorkflowServiceStubsOptions
+import kotlin.random.Random
 
 class StarterWorkflow
 
@@ -12,12 +13,11 @@ fun main(args: Array<String>) {
     val service = WorkflowServiceStubs.newServiceStubs(options)
     val client = WorkflowClient.newInstance(service)
     val workflowOptions = WorkflowOptions.newBuilder()
-        .setWorkflowId("workflowID")
+        .setWorkflowId(Random.nextInt(0,100).toString())
         .setTaskQueue("myQueue")
         .build()
     val workflow = client.newWorkflowStub(MyWorkflow::class.java, workflowOptions)
 
-//    workflow.runWorkflow()
     WorkflowClient.execute(workflow::runWorkflow)
 
 }

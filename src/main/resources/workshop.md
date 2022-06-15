@@ -1,7 +1,7 @@
 1. Introduction
    - use-case for workflow engine
    - Intro Temporal (Workflow, Activities, Temporal Server)
-      - Workflow stateful/Activity stateless  
+      - Workflow stateful/Activity stateless
 
 2. Basic Workflow example
    - Two Activities with log messages
@@ -9,7 +9,9 @@
    1. Queries
        - add member variable, set it during workflow, query it after
    1. Signal
-          - add boolean for signal + add waiting state + add signal method
+       - add boolean for signal + add waiting state + add signal method
+   1. Return values
+       - Let first activity return something that is used in second activity
 3. Setup
    - TaskQueue as connector, StarterWorker, StarterWorkflow
    - Start workflow without worker running -> Start workflow

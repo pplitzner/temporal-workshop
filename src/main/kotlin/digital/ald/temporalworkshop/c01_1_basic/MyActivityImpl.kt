@@ -1,4 +1,4 @@
-package digital.ald.temporalworkshop.basic
+package digital.ald.temporalworkshop.c01_1_basic
 
 class MyActivityImpl: MyActivity {
 

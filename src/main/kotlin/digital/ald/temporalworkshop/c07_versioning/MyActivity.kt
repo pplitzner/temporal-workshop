@@ -1,4 +1,4 @@
-package digital.ald.temporalworkshop.versioning
+package digital.ald.temporalworkshop.c07_versioning
 
 import io.temporal.activity.ActivityInterface
 import io.temporal.activity.ActivityMethod

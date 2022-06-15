@@ -1,16 +1,14 @@
-package digital.ald.temporalworkshop.versioning
+package digital.ald.temporalworkshop.c01_3_signal
 
 import io.temporal.client.WorkflowClient
 import io.temporal.serviceclient.WorkflowServiceStubs
 import io.temporal.serviceclient.WorkflowServiceStubsOptions
 
-class UnblockWorkflow
-
-fun main(args: Array<String>) {
+fun main() {
     val options = WorkflowServiceStubsOptions.newBuilder().build()
     val service = WorkflowServiceStubs.newServiceStubs(options)
     val client = WorkflowClient.newInstance(service)
-    val workflow = client.newWorkflowStub(MyWorkflow::class.java, "4")
+    val workflow = client.newWorkflowStub(MyWorkflow_c01_3::class.java, "workflowID")
 
-    workflow.unblock()
+    workflow.increaseActivitiesExecuted()
 }
