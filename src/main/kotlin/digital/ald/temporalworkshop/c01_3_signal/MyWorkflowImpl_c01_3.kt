@@ -16,24 +16,23 @@ class MyWorkflowImpl_c01_3: MyWorkflow_c01_3 {
     
     private val activity = Workflow.newActivityStub(MyActivity_c01_3::class.java, activityOptions)
 
-    var activitiesExecuted: Int = 0
+    var signalsReceived: Int = 0
     
     override fun runWorkflow() {
         println("Workflow started")
-        activity.doSomething()
-        activitiesExecuted = activitiesExecuted.inc()
+        for (i in 1..10) {
+            activity.doSomething()
+            println("Current signal count: $signalsReceived")
+        }
 
-        activity.doAnotherThing()
-        activitiesExecuted = activitiesExecuted.inc()
-
-        println("Activities executed: $activitiesExecuted")
+        println("Signal received during execution: $signalsReceived")
     }
 
-    override fun activitiesExecuted() = activitiesExecuted
+    override fun signalsReceived() = signalsReceived
 
-    override fun increaseActivitiesExecuted() {
+    override fun sendSignal() {
         println("Increase count")
-        activitiesExecuted = activitiesExecuted.inc()
+        signalsReceived = signalsReceived.inc()
     }
 }
 
@@ -43,9 +42,9 @@ interface MyWorkflow_c01_3 {
     fun runWorkflow()
 
     @QueryMethod
-    fun activitiesExecuted() : Int
+    fun signalsReceived() : Int
 
     @SignalMethod
-    fun increaseActivitiesExecuted()
+    fun sendSignal()
 }
 

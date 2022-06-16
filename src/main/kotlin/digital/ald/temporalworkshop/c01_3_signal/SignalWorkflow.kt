@@ -10,5 +10,5 @@ fun main() {
     val client = WorkflowClient.newInstance(service)
     val workflow = client.newWorkflowStub(MyWorkflow_c01_3::class.java, "workflowID")
 
-    workflow.increaseActivitiesExecuted()
+    workflow.sendSignal()
 }

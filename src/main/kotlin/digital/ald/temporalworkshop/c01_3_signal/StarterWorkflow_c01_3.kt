@@ -15,6 +15,6 @@ fun main() {
         .build()
     val workflow = client.newWorkflowStub(MyWorkflow_c01_3::class.java, workflowOptions)
 
-    workflow.runWorkflow()
+    WorkflowClient.execute(workflow::runWorkflow)
 
 }
