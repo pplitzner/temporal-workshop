@@ -12,14 +12,7 @@
        - add boolean for signal + add waiting state + add signal method
    1. Return values
        - Let first activity return something that is used in second activity
-3. Setup
-   - TaskQueue as connector, StarterWorker, StarterWorkflow
-   - Start workflow without worker running -> Start workflow
-   - Namespaces
-   - Stubs (Typed and untyped)
-   - Dynamic Workflow(?)
-      - Dynamic query and signal handlers
-4. Temporal Web UI
+3. Temporal Web UI
    - List of workflows (workflowId + runId)
    - Filter options/Advanced search (only possible with Elastic)
    - Summary (input/result)
@@ -29,6 +22,13 @@
    - Query + Stacktrace
    - Terminate (only write operation)
    - Show waiting state + signal example
+4. Setup
+   - TaskQueue as connector, StarterWorker, StarterWorkflow
+   - Start workflow without worker running -> Start worker
+   - Namespaces
+   - Stubs (Typed and untyped)
+   - Dynamic Workflow(?)
+      - Dynamic query and signal handlers
 5. Exception Handling
    - WorkflowRetryOption
       - default no retries, can be reset

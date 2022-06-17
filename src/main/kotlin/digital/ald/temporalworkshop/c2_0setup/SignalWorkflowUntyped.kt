@@ -1,4 +1,4 @@
-package digital.ald.temporalworkshop.c01_3_signal
+package digital.ald.temporalworkshop.c2_0setup
 
 import io.temporal.client.WorkflowClient
 import io.temporal.serviceclient.WorkflowServiceStubs
@@ -8,9 +8,9 @@ fun main() {
     val options = WorkflowServiceStubsOptions.newBuilder().build()
     val service = WorkflowServiceStubs.newServiceStubs(options)
     val client = WorkflowClient.newInstance(service)
-    val workflow = client.newWorkflowStub(MyWorkflow_c01_3::class.java, "workflowID")
+    val workflow = client.newUntypedWorkflowStub("workflowID")
 
-    workflow.sendSignal()
+//    workflow.signal("sendSignal")
 
-//    workflow.stopWorkflow()
+    workflow.signal("stop")
 }
