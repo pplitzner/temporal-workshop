@@ -11,4 +11,6 @@ fun main() {
     val workflow = client.newWorkflowStub(MyWorkflow_c01_3::class.java, "workflowID")
 
     workflow.sendSignal()
+
+    workflow.stopWorkflow()
 }
