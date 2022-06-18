@@ -18,7 +18,6 @@ class MyWorkflowImpl_c01_2: MyWorkflow_c01_2 {
     var activitiesExecuted: Int = 0
     
     override fun runWorkflow() {
-        println("Workflow started")
         activity.doSomething()
         activitiesExecuted = activitiesExecuted.inc()
 

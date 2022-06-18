@@ -1,7 +1,17 @@
 1. Introduction
    - use-case for workflow engine
+     - distributes systems are complex, unreliable, need scaling
+     - Workflow engines orchestrate teh sequence of tasks executed in a workflow
+     - Temporal idea: workflow as code
+       - a lot of other engines have their own description language like XML or JSON
+       - but with a general purpose language you get a lot of feature out of the box
+         - versioning
+         - testing
+         - IDE
+         - Frameworks
    - Intro Temporal (Workflow, Activities, Temporal Server)
       - Workflow stateful/Activity stateless
+      - https://docs.temporal.io/tasks/#activity-task-execution <- Activities, Queues, etc.
 
 2. Basic Workflow example
    - Two Activities with log messages
@@ -27,6 +37,7 @@
    - Start workflow without worker running -> Start worker
    - Namespaces
    - Stubs (Typed and untyped)
+      - untyped signals durch signalName, auch individualisierbar durch Annotation
    - Dynamic Workflow(?)
       - Dynamic query and signal handlers
 5. Exception Handling
@@ -35,6 +46,7 @@
       - infinite execution time
    - ActivityRetryOptions
       - infinite retries
+      - https://docs.temporal.io/concepts/what-is-a-retry-policy/
    1. ActivityFailure
       - Throw exception in activity method
       - show stacktrace in UI

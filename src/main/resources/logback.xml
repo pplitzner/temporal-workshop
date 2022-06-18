@@ -5,6 +5,8 @@
         </encoder>
     </appender>
     <logger name="io.grpc.netty" level="INFO"/>
+    <logger name="io.temporal.serviceclient.ChannelManager" level="INFO"/>
+    <logger name="io.temporal.internal.replay.ReplayWorkflowTaskHandler" level="INFO"/> <!-- set to debug for replay logs -->
     <root level="DEBUG">
         <appender-ref ref="STDOUT" />
     </root>

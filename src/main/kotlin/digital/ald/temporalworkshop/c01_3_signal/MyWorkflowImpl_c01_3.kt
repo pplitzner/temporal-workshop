@@ -5,6 +5,7 @@ import io.temporal.workflow.SignalMethod
 import io.temporal.workflow.Workflow
 import io.temporal.workflow.WorkflowInterface
 import io.temporal.workflow.WorkflowMethod
+import org.slf4j.Logger
 import java.time.Duration
 
 class MyWorkflowImpl_c01_3: MyWorkflow_c01_3 {
@@ -13,6 +14,8 @@ class MyWorkflowImpl_c01_3: MyWorkflow_c01_3 {
         .setScheduleToCloseTimeout(Duration.ofMinutes(10))
         .build()
     
+    private val log: Logger = Workflow.getLogger(this.javaClass)
+
     private val activity = Workflow.newActivityStub(MyActivity_c01_3::class.java, activityOptions)
 
     private var signalsReceived: Int = 0
@@ -20,21 +23,21 @@ class MyWorkflowImpl_c01_3: MyWorkflow_c01_3 {
     private var exit = false
     
     override fun runWorkflow() {
-        println("Workflow started")
+        log.info("Workflow started")
 
         while (true) {
             activity.doSomething()
-            println("Current signal count: $signalsReceived")
+            log.info("Current signal count: $signalsReceived")
             if (exit) {
                 break
             }
         }
 
-        println("Signal received during execution: $signalsReceived")
+        log.info("Signal received during execution: $signalsReceived")
     }
 
     override fun sendSignal() {
-        println("Increase count")
+        log.info("Increase count")
         signalsReceived = signalsReceived.inc()
     }
 
