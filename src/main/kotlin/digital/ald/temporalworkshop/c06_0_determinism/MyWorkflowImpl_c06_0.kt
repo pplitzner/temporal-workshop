@@ -1,4 +1,4 @@
-package digital.ald.temporalworkshop.c01_3_signal
+package digital.ald.temporalworkshop.c06_0_determinism
 
 import io.temporal.activity.ActivityOptions
 import io.temporal.workflow.SignalMethod
@@ -8,53 +8,49 @@ import io.temporal.workflow.WorkflowMethod
 import org.slf4j.Logger
 import java.time.Duration
 
-class MyWorkflowImpl_c01_3: MyWorkflow_c01_3 {
+class MyWorkflowImpl_c06_0: MyWorkflow_c06_0 {
 
-    var activityOptions: ActivityOptions = ActivityOptions.newBuilder()
+    private var activityOptions: ActivityOptions = ActivityOptions.newBuilder()
         .setStartToCloseTimeout(Duration.ofMinutes(10))
         .build()
     
     private val log: Logger = Workflow.getLogger(this.javaClass)
-
-    private val activity = Workflow.newActivityStub(MyActivity_c01_3::class.java, activityOptions)
-
-    private var signalsReceived: Int = 0
+    
+    private val activity = Workflow.newActivityStub(MyActivity_c06_0::class.java, activityOptions)
 
     private var exit = false
-    
+
     override fun runWorkflow() {
         log.info("Workflow started")
+        println("System log: wf started")
 
         while (true) {
+//            Thread.sleep(10000)
             activity.doSomething()
-            log.info("Current signal count: $signalsReceived")
+//            val rndInt = Random.nextInt()
+//            if (exit || rndInt%2==0) {
             if (exit) {
                 break
             }
         }
 
-        log.info("Signal received during execution: $signalsReceived")
-    }
-
-    override fun sendSignal() {
-        log.info("Increase count")
-        signalsReceived = signalsReceived.inc()
+        log.info("Workflow finished")
     }
 
     override fun stopWorkflow() {
         exit = true
     }
+
 }
 
 @WorkflowInterface
-interface MyWorkflow_c01_3 {
+interface MyWorkflow_c06_0 {
+
     @WorkflowMethod
     fun runWorkflow()
 
-    @SignalMethod
-    fun sendSignal()
-
-    @SignalMethod
+    @SignalMethod(name = "stop")
     fun stopWorkflow()
+
 }
 

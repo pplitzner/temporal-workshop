@@ -6,13 +6,16 @@ import io.temporal.workflow.SignalMethod
 import io.temporal.workflow.Workflow
 import io.temporal.workflow.WorkflowInterface
 import io.temporal.workflow.WorkflowMethod
+import org.slf4j.Logger
 import java.time.Duration
 
 class MyWorkflowImpl : MyWorkflow {
 
     private var activityOptions: ActivityOptions = ActivityOptions.newBuilder()
-        .setScheduleToCloseTimeout(Duration.ofMinutes(10))
+        .setStartToCloseTimeout(Duration.ofMinutes(10))
         .build()
+
+    private val log: Logger = Workflow.getLogger(this.javaClass)
 
     private val activity = Workflow.newActivityStub(MyActivity::class.java, activityOptions)
 
@@ -20,13 +23,8 @@ class MyWorkflowImpl : MyWorkflow {
 
     override fun runWorkflow() {
         try {
-            println("Start workflow")
-            val vDU1122 = Workflow.getVersion("[DU-1122]", Workflow.DEFAULT_VERSION, 1)
-            val vDU1123 = Workflow.getVersion("[DU-1123]", Workflow.DEFAULT_VERSION, 1)
-            val vDU1124 = Workflow.getVersion("[DU-1124]", Workflow.DEFAULT_VERSION, 1)
+            log.info("Start workflow")
 
-
-            activity.doSomething()
             activity.doSomething()
 
             Workflow.await { unblock }

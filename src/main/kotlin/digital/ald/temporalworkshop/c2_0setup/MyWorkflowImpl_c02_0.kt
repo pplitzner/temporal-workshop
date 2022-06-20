@@ -11,7 +11,7 @@ import java.time.Duration
 class MyWorkflowImpl_c02_0: MyWorkflow_c02_0 {
 
     private var activityOptions: ActivityOptions = ActivityOptions.newBuilder()
-        .setScheduleToCloseTimeout(Duration.ofMinutes(10))
+        .setStartToCloseTimeout(Duration.ofMinutes(10))
         .build()
     
     private val log: Logger = Workflow.getLogger(this.javaClass)

@@ -7,7 +7,7 @@ import java.time.Duration
 class MyWorkflowImpl: MyWorkflow {
 
     var activityOptions: ActivityOptions = ActivityOptions.newBuilder()
-        .setScheduleToCloseTimeout(Duration.ofMinutes(10))
+        .setStartToCloseTimeout(Duration.ofMinutes(10))
         .build()
     
     private val activity = Workflow.newActivityStub(MyActivity::class.java, activityOptions)

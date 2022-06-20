@@ -1,4 +1,4 @@
-package digital.ald.temporalworkshop.c07_versioning
+package digital.ald.temporalworkshop.c06_0_determinism
 
 import io.temporal.client.WorkflowClient
 import io.temporal.serviceclient.WorkflowServiceStubs
@@ -11,9 +11,9 @@ fun main() {
     val workflowClient = WorkflowClient.newInstance(service)
 
     val workerFactory = WorkerFactory.newInstance(workflowClient)
-    val worker = workerFactory.newWorker("c07")
-    worker.registerWorkflowImplementationTypes(MyWorkflowImpl::class.java)
-    worker.registerActivitiesImplementations(MyActivityImpl())
+    val worker = workerFactory.newWorker("c06_0")
+    worker.registerWorkflowImplementationTypes(MyWorkflowImpl_c06_0::class.java)
+    worker.registerActivitiesImplementations(MyActivityImpl_c06_0())
 
     workerFactory.start()
 }
