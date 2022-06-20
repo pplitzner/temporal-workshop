@@ -12,6 +12,7 @@
    - Intro Temporal (Workflow, Activities, Temporal Server)
       - Workflow stateful/Activity stateless
       - https://docs.temporal.io/tasks/#activity-task-execution <- Activities, Queues, etc.
+      - Activities/Workflows are just code -> Unit-Test
 
 2. Basic Workflow example
    - Two Activities with log messages
@@ -53,10 +54,19 @@
       - show EventHistory
       - Fix and restart worker
    2. Activity timeout
-   3. Temporal Server down
-   4. Workflow Exception
-   5. Workflow Timeout
-   6. Activity.wrap()
+      - startToCloseTimeOut -> Infinite Retry
+        - _io.grpc.StatusRuntimeException: NOT_FOUND: invalid activityID or activity already timed out or invoking workflow is completed_
+      - scheduleToClose -> Workflow failed
+        - _ActivityFailure_ caused by _TimeoutFailure: message='activity ScheduleToClose timeout', timeoutType=TIMEOUT_TYPE_SCHEDULE_TO_CLOSE_
+      - **Note**: Wenn Workflow in ActivityRetry hängt, kann man die RetryOptions nicht nachträglich ändern
+   3. Workflow Exception
+      - Dauer-Retry -> Code-Fix wird gereplayt wie bei Activities 
+   4. Workflow Timeout
+      - tctl wf describe -w workflowID
+   5. Temporal Server down
+      - _io.grpc.StatusRuntimeException: UNAVAILABLE: Network closed for unknown reason_
+      - fängt sich wieder nach restart
+   7. Activity.wrap()
       - continueAsNew(?)
 6. Determinism
    - When does replay happen?

@@ -1,4 +1,4 @@
-package digital.ald.temporalworkshop.c03_0_exceptions
+package digital.ald.temporalworkshop.c03_3_timeout_workflow
 
 import io.temporal.client.WorkflowClient
 import io.temporal.serviceclient.WorkflowServiceStubs
@@ -11,9 +11,8 @@ fun main() {
     val workflowClient = WorkflowClient.newInstance(service)
 
     val workerFactory = WorkerFactory.newInstance(workflowClient)
-    val worker = workerFactory.newWorker("c03_0")
-    worker.registerWorkflowImplementationTypes(MyWorkflowImpl_c03_0::class.java)
-    worker.registerActivitiesImplementations(MyActivityImpl_c03_0())
+    val worker = workerFactory.newWorker("c03_3")
+    worker.registerWorkflowImplementationTypes(MyWorkflowImpl_c03_3::class.java)
 
     workerFactory.start()
 }
