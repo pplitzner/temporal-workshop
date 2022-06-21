@@ -14,6 +14,7 @@ fun main() {
         .setTaskQueue("c02_0")
         .build()
     val workflow = client.newUntypedWorkflowStub("MyWorkflow_c02_0", workflowOptions)
+    // you can only cancel/terminate with untyped stubs
 
     workflow.start()
 
