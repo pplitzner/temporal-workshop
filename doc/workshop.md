@@ -1,7 +1,12 @@
-1. Introduction
+ 1. History
+    2. Amazon giant binary -> break it into (micro) services -> communicate via queues (SimpleQueueServices)
+    3. Amazon Simple workflow service
+    4. Uber -> Cadence
+    5. Temporal
+2. Introduction
    - use-case for workflow engine
      - distributes systems are complex, unreliable, need scaling
-     - Workflow engines orchestrate teh sequence of tasks executed in a workflow
+     - Workflow engines orchestrate the sequence of tasks executed in a workflow
      - Temporal idea: workflow as code
        - a lot of other engines have their own description language like XML or JSON
        - but with a general purpose language you get a lot of feature out of the box
@@ -9,10 +14,12 @@
          - testing
          - IDE
          - Frameworks
-   - Intro Temporal (Workflow, Activities, Temporal Server)
+   - Intro Temporal Architecture (Workflow, Activities, Temporal Server)
       - Workflow stateful/Activity stateless
       - https://docs.temporal.io/tasks/#activity-task-execution <- Activities, Queues, etc.
       - Activities/Workflows are just code -> Unit-Test
+      - Workers run your code
+      - The temporal server is a kind of backend orchestrating service that manages queues, states and durabel timers
 
 2. Basic Workflow example
    - Two Activities with log messages
@@ -90,13 +97,18 @@
 
 
 Potential topics
-    Saga compensation
-    ChildWorkflows(?)
-    Cancelling Workflows
-        CanceledFailure/ActivityFailure
-    Cron-Schedules
-    Heartbeats/Polling
+* Saga compensation
+* ChildWorkflows(?)
+* Cancelling Workflows
+* CanceledFailure/ActivityFailure
+* Cron-Schedules
+* Heartbeats/Polling
+* Ground of truth: Workflow or internal DB?
 
+// use WorkflowClient.execute to return future that contains Workflow result or failure, or
+// use WorkflowClient.start to return WorkflowId and RunId of the started Workflow).
+
+Any exception thrown from an activity is wrapped into a TemporalFailure resp. ActivityFailure
 
  Potentielle Fehlerbilder notieren
   - Workflow starten ohne Worker

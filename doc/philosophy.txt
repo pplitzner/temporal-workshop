@@ -1,0 +1,168 @@
+https://www.linkedin.com/posts/lorensr_time-travel-debugging-production-code-activity-7094359788829990912-swSe
+
+
+philosophy time — i have a staff engineer who’s constantly getting caught up on the fact that Temporal seems to be pushing us toward a state machine or a reducer model all the time. i tend to think in these terms anyway, so i don’t mind, but he’s always asking “but isn’t the whole point that i can just write ‘normal’ procedural code?”
+i’m thinking about things like
+serializeable state makes queries easy
+continue-as-new is very simple if you can just ship your business process over the wire
+diagnosing history/what happened is really easy if you can “ok print state as of every event handling that happens”
+pulling messages off an internal queue makes your signal handler mostly braindead
+handling unexpected business events via signals is easier if you can have a formal “where can i go from here” construct rather than just ad hoc interrupts during a procedural program
+what would you say? would you say
+he needs to get over it; no tool actually lets you write code without ever thinking about a platform
+he’s right and you’re a weirdo; my temporal workflow looks like a long procedural program with lots of variable bindings. i have no idea why you’re using a state machine
+???
+28 replies
+
+
+Eric Loren
+  16 hours ago
+java sdk if it matters, though AFAICT it’s not a huge factor
+
+
+Tihomir Surdilovic
+  15 hours ago
+maybe question to ask is "how would you implement this use case without Temporal" :slightly_smiling_face:
+
+
+Eric Loren
+  15 hours ago
+i took that tack for sure! he doesn’t have an answer yet; waiting on that thread
+
+
+Chad Retz
+:temporal:  15 hours ago
+My thoughts (Temporal employee but thoughts are my own) - you can't avoid knowing you're in a workflow when authoring a workflow, and therefore the constraints are a fact of life as they are with all code. IMO the whole point isn't to just be able to write procedural code, the whole point is to use the language (and most constructs) you are familiar with. Code patterns can definitely differ inside and outside of Temporal constraints.
+
+
+playsted
+  14 hours ago
+I've been using both styles in the workflows I've been building. I do think allowing "normal" procedural code is something unique temporal brings over many of its alternatives so wouldn't want to discourage that when it makes sense. You can't ignore the platform but doesn't mean you have to model everything as a state machine. I find it similar to state management in React where for basic apps something like Redux (or your favorite alternative) isn't really needed and probably complicates it more than it helps. As the app complexity grows having a formal way to manage state becomes much more important. With temporal a basic workflow running procedurally is easy. When you start adding a lot of signals, queries, and snapshotting (continue as new) having a more formal way to manage state is really useful.
+:+1:
+1
+
+
+
+Spencer Judge
+:temporal:  14 hours ago
+I think that’s a very solid assessment and I agree
+
+
+Spencer Judge
+:temporal:  14 hours ago
+Having formalism always helps when things start getting gnarly
+
+
+Spencer Judge
+:temporal:  14 hours ago
+No model exists (yet, maybe someday) that lets you just totally gloss over the hard parts.
+
+
+Spencer Judge
+:temporal:  14 hours ago
+But hopefully we make a lot of them easier, still. Even if you end up formalizing things, it’s still very likely a lot less work than doing it all by hand.
+
+
+Eric Loren
+  12 hours ago
+thanks all; really appreciate the thoughts
+
+
+Maxim Fateev
+  10 hours ago
+IMHO a state machine is useful when the same event leads to a different action/code path based on a process state. When people use state machines to model business processes in the majority of the situations only one action is expected (besides error handling) for each type of event. So the explicit state machine is just overhead.
+
+
+Maxim Fateev
+  10 hours ago
+Also state machines are really bad about state management and cannot support strongly typed arguments to activities.
+
+
+Maxim Fateev
+  10 hours ago
+By “state management” I mean data that workflow holds, not the name of the current state.
+
+
+Spencer Judge
+:temporal:  9 hours ago
+ cannot support strongly typed arguments to activities.
+How so?
+
+
+Eric Loren
+  9 hours ago
+I think if you try to type acceptable actions for a given state machine state you get into dependent typing
+
+
+Chad Retz
+:temporal:  9 hours ago
+Or big unions (or DSL macros like what I think
+@Spencer Judge
+ did for our Rust core)
+
+
+Spencer Judge
+:temporal:  9 hours ago
+I think you definitely can, you don't even necessarily need fancy macros like what I did. But, you do need a way to represent per-state logic in a typesafe way which is varyingly difficult depending on language. You don't even need dependent types (though they can help). You just need something specialization-adjacent (IE: a way to have something like generics, with logic that varies based on the type of the generic) - ex: https://hoverbear.org/blog/rust-state-machine-pattern/
+But, even failing all that, you can always do something as stupid as
+fn myWorkflow() {
+    if inStateA { callWellTypedActivityA() }
+    else if inStateB { callWellTypedActivityB(foo, bar) }
+    // etc etc
+}
+Maybe you have more activity definitions, but that's probably where you were headed anyway if you wanted type safety.
+
+
+Maxim Fateev
+  8 hours ago
+Where does Foo and bar come from?
+
+
+Maxim Fateev
+  8 hours ago
+And this code is much harder to write and maintain than normal procedural one
+
+
+Spencer Judge
+:temporal:  8 hours ago
+Anywhere. They could be local bindings, workflow input, etc.
+
+
+Spencer Judge
+:temporal:  8 hours ago
+And yeah I agree that’s not any nicer, but it’s just to say you can still have typed activities.
+
+
+Eric Loren
+  8 hours ago
+So hm, since I stopped using procedural code very fast for the particular project I'm working on, I should ask -- how would a procedural program continue as new, practically? How would it have any idea where to resume, if it starts from an arbitrary state but with no events? It sounds like it'd be a lot of work to stop it from doing a lot of the same activities again
+
+
+Maxim Fateev
+  8 hours ago
+I'm not aware of any use case that exceeds Temporal limits and is not using loops. (edited)
+
+
+Maxim Fateev
+  8 hours ago
+It is either a sequence of steps that fits a single workflow or it is a a loop over a collection or an event handling loop (edited)
+
+
+Maxim Fateev
+  8 hours ago
+The loop ones are easily converted to the continue as new (edited)
+
+
+Eric Loren
+  8 hours ago
+That makes sense. In his case I think he was using it to atomically restart a process, so maybe something that feels more like business logic. I told him not to use platform level constructs for that, which sounds like is the best-practices answer
+
+
+Maxim Fateev
+  8 hours ago
+I think he didn't internalize that there's no need to handle process restarts at all.
+
+
+Maxim Fateev
+  8 hours ago
+Temporal handles the recovery part
