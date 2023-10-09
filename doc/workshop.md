@@ -30,8 +30,10 @@
        - add boolean for signal + add waiting state + add signal method
    1. Return values
        - Let first activity return something that is used in second activity
+       - **Best practice**: Use objects as inputs to avoid breaking workflow signature 
 3. Temporal Web UI
    - List of workflows (workflowId + runId)
+   - Namespaces (workflowId is unique for one namespace)
    - Filter options/Advanced search (only possible with Elastic)
    - Summary (input/result)
    - EventHistory

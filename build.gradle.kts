@@ -7,7 +7,7 @@ plugins {
 group = "digital.ald"
 version = "1.0-SNAPSHOT"
 
-val temporalVersion = "1.12.0"
+val temporalVersion = "1.21.2"
 
 repositories {
     mavenCentral()
