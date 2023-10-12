@@ -19,7 +19,7 @@
       - https://docs.temporal.io/tasks/#activity-task-execution <- Activities, Queues, etc.
       - Activities/Workflows are just code -> Unit-Test
       - Workers run your code
-      - The temporal server is a kind of backend orchestrating service that manages queues, states and durabel timers
+      - The temporal server is a kind of backend orchestrating service that manages queues, states and durable timers
 
 2. Basic Workflow example
    - Two Activities with log messages
