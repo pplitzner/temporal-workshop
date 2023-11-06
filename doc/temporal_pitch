@@ -1,0 +1,58 @@
+Andy Cooper (slack-corp)
+  4 days ago
+Just some thoughts from the last couple of months after chatting and thinking about Temporal with colleagues.
+If an org already has a workflow orchestration tool of any kind, the pitch to bring on Temporal can be difficult. I've noticed the conversations all seem to follow a similar pattern:
+I pitch Temporal for an existing or new use case. They ask the appropriate question of how Temporal is better than x tool that we already have or are thinking of bringing on. In some cases we already have a service that can be made to fit the use case. In other cases, there is already a specialized orchestration tool available in open source.
+These are all valid concerns and outcomes to the individual conversations I've had but my pitch though is more around Temporal being able to solve several of the use cases we have. So it may not move the needle in a meaningful way for the first use case, I think the benefits would begin to show as we consolidated existing and new use cases on Temporal. This is especially true in my mind when it comes to solving a lot of the issues we experience with hosting Airflow.
+So all this leads me to, it would be nice to see more open source tooling built on top of Temporal. For example, having a data-pipeline specific framework, built on top of Airflow makes it more likely for an org to give Temporal a look and from there the org's use cases would expand.
+Curious if others are having a similar experience? Are there already some open source projects built ontop of Temporal? Or if there are any other ideas for services / tooling that makes sense to build an open source solution ontop of Temporal?
+:eyes:
+7
+
+
+
+
+
+4 replies
+
+
+Maxim Fateev
+  4 days ago
+Some of the project ideas that immediately come to mind:
+CI/CD
+control plane for Data/ML
+Control plane for infra. For example RDS type service, managing k8s clusters, etc.
+cron based on github repository of cron configs
+Support for existing config languages: airflow, step-functions, bpmn, conductor, etc.
+
+
+Greg Haskins
+  3 days ago
+Our original architecture was based on Kafka and Camunda before I discovered Temporal and introduced it into our stack in 2022.  Both Kafka and Camunda are perfectly good technologies fit for a whole variety of use cases, but Temporal brought some things to the table that I could not achieve with the previous architecture that really unlocked the current design.
+For one, we have a heterogeneous microservice architecture with a mix of golang and clojure services.  With Camunda based on java/bpmn, you generally were not integrating workflows into your service directly, but we had a literal workflow service that various other services could call upon to do some long-running/reliable thing.  The end result was that adding new workflows to the system was fairly painful because of the service/language decoupling, which precipitated a hesitancy to add them and thus, we had a very low adoption rate.  This meant we either missed feature opportunities because the feature didn’t get implemented at all, or they were implemented awkwardly by hand, such as a custom FSM in a kafka event processor.
+Once we added Temporal, microservices that needed workflow or other reliable processing could just be added directly to their service in a natural way, close to the code that was responsible for the domain.  Not long after, almost all of our services became native Temporal consumers.  Suddenly, each service could easily add the needed features that required high-performance, reliable operation in the native language of the service.  The result was that feature velocity went way up.
+On top of this, we got about 10x performance using Temporal+Cassandra over the original Kafka Exactly-Once-based design we had for processing commands in our CQRS-based architecture for the same-sized cluster.  We were also able to eliminate head-of-line blocking due to the difference in scaling models between Kafka and Temporal.  So things became easier to write, reason about, maintain, and were faster simply by switching to Temporal.
+I am not aware of anything that is similar to Temporal in terms of what it really does.  You could say it competes with Camunda, because they are both “workflow engines”.  But they are not the same technology class at all, in my opinion.  You could say it competes with Kafka, because they both can reliably process transactions.  However, they do so with very different models and each excels at different types of processing.
+I would not hesitate to recommend organizations consider adding Temporal to the mix.  If the argument is “what does it replace?“, they are asking the wrong questions.  It is kind of in its own space, and it’s an incredibly important one.
+I hope this helps.
+:heart:
+5
+:temporalove:
+5
+
+
+
+Konstantinos Kollias
+  3 days ago
+Hello
+@Greg Haskins
+, thanks for the amazing writeup!!!
+I was wondering, was camunda used also as a low/no code solution for departments with low/no engineering knowledge? If so, in such cases how do you onboard these departments to a temporal based solution? (edited)
+
+
+Andy Cooper (slack-corp)
+  3 days ago
+Thanks Greg, I enjoy reading success stories / use cases like yours.
+Given what you described it sounds like Temporal was exactly the right tool for the job. Moving from “literal workflow service that various other services could call upon to do some long-running/reliable thing” for various microserves to “microservices that needed workflow or other reliable processing could just be added directly to their service in a natural way, close to the code that was responsible for the domain” is a pitch that immediately resonates, or at least with me it does.
+ I am not aware of anything that is similar to Temporal in terms of what it really does.
+Same. I can think of a lot of tools that enable some subset of the use cases temporal enables, but Temporal is a superset of most of them. When looked at individually though, the specialization of other tools might win out for the use case they’re being evaluated for.
