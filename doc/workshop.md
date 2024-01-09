@@ -115,4 +115,6 @@ Any exception thrown from an activity is wrapped into a TemporalFailure resp. Ac
  Potentielle Fehlerbilder notieren
   - Workflow starten ohne Worker
   - Workflow und Worker auf untersch. Queues
-  - Temporal Server nicht gestartet
+  - Temporal Server nicht gestartet 
+    
+https://medium.com/@yongskong/the-illusion-of-durable-execution-3a27b5ce0a33
