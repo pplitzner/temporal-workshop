@@ -1,13 +1,24 @@
-# Motivation
-
-
-----
-
-![](https://pplitzner.github.io/images/temporal-devopenspace/img8.png)
+# Temporal
 
 ----
 
-![](https://pplitzner.github.io/images/temporal-devopenspace/img9.png)
+
+![](https://pplitzner.github.io/images/temporal-devopenspace/temporal_history2.png)
+
+----
+
+![](https://pplitzner.github.io/images/temporal-devopenspace/img1.png)
+
+----
+
+![](https://pplitzner.github.io/images/temporal-devopenspace/img2.png)
+
+----
+
+![](https://pplitzner.github.io/images/temporal-devopenspace/img7.png)
+
+Note:
+Everything is just code (in your preferred language), no other tools/languages/frameworks needed
 
 ----
 
@@ -19,16 +30,7 @@
 
 ---
 
-# Temporal
-
-----
-
-
-![](https://pplitzner.github.io/images/temporal-devopenspace/temporal_history2.png)
-
-----
-
-## Was ist ein Workflow?
+## Workflow
 
 ----
 
@@ -36,7 +38,9 @@
 
 ----
 
-### Was ist ein Workflow?
+### Workflow
+
+![](https://pplitzner.github.io/images/flex_workflow_01.png =x130)
 
 * Deterministische Abfolge von Schritten
 * Start/Ende
@@ -44,8 +48,8 @@
   * Langlebige Prozesse
   * Bedingte Abzweigungen
   * Zyklen
-  * (External) Exception handling
-  * Verschiedene Systeme
+  * Exception handling
+  * Verschiedene Systeme/Stakeholder
 
 ----
 
@@ -55,8 +59,6 @@
 * Activities <i class="fa fa-wrench"></i>
 * Queries/Signals <i class="fa fa-bolt"></i>
 * Timers <i class="fa fa-clock-o" aria-hidden="true"></i>
----
-
 * Workers <i class="fa fa-cogs"></i>
 * Temporal Server <i class="fa fa-server"></i>
 
@@ -67,11 +69,17 @@ Steps = Activities
 Exception Handling = Queries/Signals
 Long running = timers
 
+
 ---
 
 ## Temporal architecture
 
 ![](https://pplitzner.github.io/images/temporal_architecture.png)
+
+Note:
+* Activities sind die einzelnen Schritte des Workflows. Sie können beliebige Gestalt annehmen (einfache Funktionsaufrufe, zeitbasierte Schritte, oder auch manuelle Schritte)
+* Hier sehen wir nochmal etwas genauer, welche Aufgaben der Temporal server übernimmt.
+
 
 ---
 
@@ -81,12 +89,15 @@ Long running = timers
 
 ![](https://pplitzner.github.io/images/flex_workflow_bpmn.png)
 
+Note:
+Wie sieht das Ganze jetzt für Temporal aus?
+
 ----
 
 ### Workflow <i class="fa fa-list-ol"></i>
 
 ``` kotlin [1-14|1|3|5|7-13|8|10|12|14]
-fun customerJourney(car: String, email: String) {
+fun customerJourney(car: String, email: String): Boolean {
     
     sendWelcomeMail(email)
     
@@ -97,12 +108,15 @@ fun customerJourney(car: String, email: String) {
         
         Workflow.sleep(Duration.ofDays(14))
         
-        customerActivity.checkupMail(email)
+        checkupMail(email)
     }
     return success
 }
 ```
 <!-- .slide: style="font-size: 34px;" -->
+
+Note:
+Bislang alles Standard-Code. Wir sehen nichts Temporal-spezifisches. Wie ist das ganze jetzt mit dem Temporal-Server verknüpft?
 
 ----
 
@@ -151,6 +165,9 @@ fun main(){
 
 <!-- .slide: style="font-size: 36px;" -->
 
+Note:
+Worker lauscht auf task queue und wartet auf Aufgaben vom Temporal server
+
 ----
 
 ## Start a workflow (SDK)
@@ -190,8 +207,11 @@ temporal workflow show --workflow-id id --fields long --output json
 
 ---
 
-# Temporal Web UI
+# Demo
 
+---
+
+# Temporal Web UI
 
 ---
 
@@ -202,7 +222,6 @@ temporal workflow show --workflow-id id --fields long --output json
   * lesender/schreibender Speicherzugriff
 * Können erneut ausgeführt werden
 * Sollten zustandslos und deterministisch sein
-
 
 Note:
 Loglevel auf ALL stellen, um non-deterministic errors zu sehen
